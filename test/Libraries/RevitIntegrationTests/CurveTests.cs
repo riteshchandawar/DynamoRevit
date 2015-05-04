@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 
+using Autodesk.DesignScript.Geometry;
 using Autodesk.Revit.DB;
 
 using Dynamo.Nodes;
@@ -90,6 +91,21 @@ namespace RevitSystemTests
             ViewModel.OpenCommand.Execute(testPath);
 
             RunCurrentModel();
+
+            var thickenCurveNodeID = "8f42e859-9f88-4b4f-b1d8-d3a2841b8d14";
+            AssertPreviewCount(thickenCurveNodeID, 4);
+
+            // get all AdaptiveComponent.
+            for (int i = 0; i <= 3; i++)
+            {
+                var thickenCurve = GetPreviewValueAtIndex(thickenCurveNodeID, i) as PolyCurve;
+                Assert.IsNotNull(thickenCurve);
+            }
+
+            var polyCurve =
+                GetPreviewValue("f64fee6e-1b62-4503-b307-ab5b3d516438") as PolyCurve;
+            Assert.NotNull(polyCurve);
+
         }
 
         [Test]
